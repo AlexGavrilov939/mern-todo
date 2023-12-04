@@ -7,6 +7,7 @@ import { Routes } from './routes/api';
 import './utils/env';
 import { errorHandler } from '@/middlewares/errorHandler';
 import * as process from 'process';
+import helmet from 'helmet';
 
 class App {
   public app: express.Application;
@@ -14,12 +15,12 @@ class App {
 
   constructor() {
     this.app = express();
-    this.appConfig();
+    this.appSetup();
     this.routes = new Routes(this.app);
     this.mongoSetup().then(() => console.log('DB connected'));
   }
 
-  private appConfig(): void {
+  private appSetup(): void {
     this.app.use(
       cors({
         origin: process.env.CORS_ALLOW_ORIGIN,
@@ -32,6 +33,9 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: false }));
 
     this.app.use(errorHandler);
+
+    this.app.use(helmet());
+    this.app.disable('x-powered-by');
   }
 
   private mongoSetup(): Promise<Mongoose> {
