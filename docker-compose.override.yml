@@ -1,0 +1,11 @@
+version: "3.4"
+
+# Development environment override
+services:
+  api:
+    volumes:
+      - ./api:/app/server:rw,cached
+
+  client:
+    volumes:
+      - ./client:/app/client:rw,cached
