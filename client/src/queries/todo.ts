@@ -17,6 +17,11 @@ export interface ITodoItem {
   deadline_date?: string;
 }
 
+interface ICreateOrUpdateProps {
+  id?: ITodoItem["_id"];
+  body: ITodoItem;
+}
+
 export const getList = async (): Promise<ITodoItem[]> => {
   const { data } = await fetch({
     url: `/tasks`,
@@ -30,10 +35,7 @@ export const getList = async (): Promise<ITodoItem[]> => {
 export const updateTask = async ({
   id,
   body,
-}: {
-  id: ITodoItem["_id"];
-  body: ITodoItem;
-}): Promise<any> => {
+}: ICreateOrUpdateProps): Promise<ITodoItem> => {
   const { data } = await fetch({
     url: `/tasks/${id}`,
     method: "PUT",
@@ -42,7 +44,9 @@ export const updateTask = async ({
 
   return data;
 };
-export const createTask = async (body: ITodoItem): Promise<any> => {
+export const createTask = async ({
+  body,
+}: ICreateOrUpdateProps): Promise<ITodoItem> => {
   const { data } = await fetch({
     url: `/tasks`,
     method: "POST",
@@ -52,22 +56,43 @@ export const createTask = async (body: ITodoItem): Promise<any> => {
   return data;
 };
 
+export const deleteTask = async ({
+  id,
+}: {
+  id: ITodoItem["_id"];
+}): Promise<ITodoItem> => {
+  const { data } = await fetch({
+    url: `/tasks/${id}`,
+    method: "DELETE",
+  });
+
+  return data;
+};
+
 export const useGetListQuery = (): UseQueryResult<ITodoItem[], Error> => {
-  return useQuery(["getList"], () => getList());
+  return useQuery(["getList"], () => getList(), { cacheTime: 0 });
 };
 
 export const useUpdateTask = (): UseMutationResult<
-  any,
+  ITodoItem,
   Error | ViolationError,
-  any
+  ICreateOrUpdateProps
 > => {
-  return useMutation(updateTask, { mutationKey: `update_task` });
+  return useMutation(updateTask);
 };
 
 export const useCreateTask = (): UseMutationResult<
-  { body: ITodoItem },
+  ITodoItem,
   Error | ViolationError,
-  any
+  ICreateOrUpdateProps
 > => {
   return useMutation(createTask);
+};
+
+export const useDeleteTask = (): UseMutationResult<
+  ITodoItem,
+  Error | ViolationError,
+  { id: ITodoItem["_id"] }
+> => {
+  return useMutation(deleteTask);
 };

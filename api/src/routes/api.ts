@@ -15,7 +15,7 @@ export class Routes {
 
     this.app.route('/').get((_req: Request, res: Response) => {
       res.status(200).send({
-        message: 'GET request successfulll!!!!',
+        message: 'Index route',
       });
     });
 

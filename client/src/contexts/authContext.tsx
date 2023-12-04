@@ -18,7 +18,7 @@ const AuthProvider: React.FC = (props) => {
       logout: logoutMutation.mutateAsync,
       isLoggingOut: logoutMutation.isLoading,
     }),
-    [logoutMutation.mutateAsync, logoutMutation.isLoading],
+    [logoutMutation.mutateAsync, logoutMutation.isLoading]
   );
 
   useEffect(() => {

@@ -8,7 +8,7 @@ export default class ViolationError extends Error {
     message: string,
     status: string,
     fields: { [key: string]: string },
-    payload?: { [key: string]: Record<string, any> },
+    payload?: { [key: string]: Record<string, any> }
   ) {
     super("Submit Validation Failed");
     this.defaultErrorMsg = message;

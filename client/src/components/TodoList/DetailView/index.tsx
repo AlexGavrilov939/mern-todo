@@ -47,13 +47,13 @@ const DetailView = ({ item, mode, onChangeItem }: DetailViewType) => {
   const formInitialData = {
     title: item?.title,
     description: item?.description,
-    createdDate: format(
+    created_date: format(
       item?.created_date ? new Date(item.created_date) : new Date(),
-      "y-MM-dd",
+      "y-MM-dd"
     ),
-    deadlineDate: format(
+    deadline_date: format(
       item?.deadline_date ? new Date(item.deadline_date) : new Date(),
-      "y-MM-dd",
+      "y-MM-dd"
     ),
   };
   return (
@@ -87,27 +87,25 @@ const DetailView = ({ item, mode, onChangeItem }: DetailViewType) => {
           enableReinitialize
           initialValues={formInitialData}
           onSubmit={(values, { setStatus, setErrors, setSubmitting }) => {
-            console.log("-onSubmit", values);
             const options = {
               onError: (error: Error | ViolationError) => {
                 setStatus({
                   isValid: false,
                   msg: `Unexpected error`,
                 });
-                console.log("error", error);
                 setSubmitting(false);
               },
               onSuccess: async () => {
                 setTimeout(() => {
                   onChangeItem(true);
                   setSubmitting(false);
-                }, 3000);
+                }, 1000);
               },
             };
             if (mode === TaskViewMode.UPDATE) {
-              updateTask({ id: item!._id, body: values }, options);
+              updateTask({ id: item!._id, body: values as ITodoItem }, options);
             } else {
-              createTask({ body: values }, options);
+              createTask({ body: values as ITodoItem }, options);
             }
           }}
         >
@@ -149,56 +147,56 @@ const DetailView = ({ item, mode, onChangeItem }: DetailViewType) => {
                 <Box>
                   <Field
                     type="date"
-                    name={"createdDate"}
+                    name={"created_date"}
                     label={"Created date"}
                     variant="standard"
                     component={MuiTextField}
                     onBlur={handleBlur}
                     onChange={(e: React.SyntheticEvent) => {
                       // @ts-ignore
-                      setFieldValue("createdDate", e.target.value);
+                      setFieldValue("created_date", e.target.value);
                     }}
                     inputProps={{
                       autoComplete: "created-date-nope",
                       id: "field-created-date",
-                      name: "createdDate",
-                      defaultValue: values.createdDate,
+                      name: "created_date",
+                      defaultValue: values.created_date,
                       min: format(new Date(), "y-MM-dd"),
                     }}
                     disabled
                     required
                   />
-                  {touched["createdDate"] && errors["createdDate"] && (
+                  {touched["created_date"] && errors["created_date"] && (
                     <FormHelperText error>
-                      {errors["createdDate"]}
+                      {errors["created_date"]}
                     </FormHelperText>
                   )}
                 </Box>
                 <Box>
                   <Field
                     type="date"
-                    name={"createdDate"}
+                    name={"deadline_date"}
                     label={"Deadline"}
                     variant="standard"
                     component={MuiTextField}
                     onBlur={handleBlur}
                     onChange={(e: React.SyntheticEvent) => {
                       // @ts-ignore
-                      setFieldValue("deadlineDate", e.target.value);
+                      setFieldValue("deadline_date", e.target.value);
                     }}
                     inputProps={{
                       autoComplete: "deadline-date-nope",
                       id: "field-deadline-date",
-                      name: "deadlineDate",
-                      defaultValue: values.deadlineDate,
+                      name: "deadline_date",
+                      defaultValue: values.deadline_date,
                       min: format(new Date(), "y-MM-dd"),
                     }}
                     disabled={isSubmitting}
                     required
                   />
-                  {touched["createdDate"] && errors["createdDate"] && (
+                  {touched["deadline_date"] && errors["deadline_date"] && (
                     <FormHelperText error>
-                      {errors["createdDate"]}
+                      {errors["deadline_date"]}
                     </FormHelperText>
                   )}
                 </Box>

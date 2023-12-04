@@ -6,7 +6,7 @@ import { CustomError } from '@/middlewares/errorHandler';
 import { check, validationResult } from 'express-validator';
 
 export class TaskController {
-  private validateInput = [
+  private static validateInput = [
     check('title').notEmpty().withMessage('Title is required'),
     check('description').optional().isString().withMessage('Description must be a string'),
     check('deadlineDate')
@@ -25,7 +25,7 @@ export class TaskController {
 
   public async create(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.validate(req);
+      await TaskController.validate(req);
       const newTask = new TaskModel(req.body);
       const task = await newTask.save();
 
@@ -66,7 +66,7 @@ export class TaskController {
 
   public async update(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.validate(req);
+      await TaskController.validate(req);
       const taskId = req.params.id;
       if (!isValidObjectId(taskId)) {
         next(new CustomError(StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST));
@@ -102,8 +102,8 @@ export class TaskController {
     }
   }
 
-  private async validate(req: Request) {
-    await Promise.all(this.validateInput.map((validation) => validation.run(req)));
+  private static async validate(req: Request) {
+    await Promise.all(TaskController.validateInput.map((validation) => validation.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       throw new CustomError(StatusCodes.BAD_REQUEST, errors.array()[0].msg);

@@ -18,7 +18,7 @@ const Page = forwardRef(
       meta?: JSX.Element | JSX.Element[];
       sx?: SxProps<Theme>;
     },
-    ref,
+    ref
   ) => (
     <>
       <Helmet>
@@ -30,7 +30,7 @@ const Page = forwardRef(
         {children}
       </Box>
     </>
-  ),
+  )
 );
 
 export default Page;

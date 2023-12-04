@@ -32,7 +32,7 @@ const TodoList = () => {
         await refetch();
       }
     },
-    [refetch],
+    [refetch]
   );
 
   return (
@@ -40,7 +40,11 @@ const TodoList = () => {
       <Container maxWidth="lg" sx={{ pt: 8, pb: 6 }}>
         <Card>
           <CardContent
-            sx={{ p: 4, "&:last-child": { pb: 4 }, textAlign: "left" }}
+            sx={{
+              p: 4,
+              "&:last-child": { pb: 4 },
+              textAlign: "left",
+            }}
           >
             <Stack sx={{ mb: 2 }}>
               <Box>
@@ -55,49 +59,67 @@ const TodoList = () => {
             </Stack>
             <Box>
               {isLoading && <LinearProgress />}
-              {!isLoading && data && (
+              {!isLoading && (
                 <Stack direction="row" spacing={3}>
                   <Stack
                     sx={{ width: !!detailView ? "45%" : "100%" }}
                     spacing={1}
                   >
-                    {data.map((item, index) => (
-                      <React.Fragment key={item._id}>
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          <Box sx={{ flex: 1 }}>{item.title}</Box>
-                          <Stack
-                            direction="row"
-                            alignItems="center"
-                            spacing={1.5}
-                          >
-                            <Status status={"active"} />
-                            <Typography
-                              variant="body2"
-                              align="center"
-                              color={"text.secondary"}
+                    {!isLoading && (data || []).length > 0 ? (
+                      <>
+                        {data!.map((item, index) => (
+                          <React.Fragment key={item._id}>
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              spacing={1}
                             >
-                              {format(
-                                new Date(item.created_date),
-                                "dd MMM H:I",
-                              )}
-                            </Typography>
-
-                            <Stack direction="row" spacing={1}>
-                              <EditTask
-                                onEditTask={() =>
-                                  setDetailView({
-                                    item,
-                                    mode: TaskViewMode.UPDATE,
-                                  })
-                                }
-                              />
-                              <RemoveTask id={item._id} />
+                              <Box sx={{ flex: 1 }}>{item.title}</Box>
+                              <Stack
+                                direction="row"
+                                alignItems="center"
+                                spacing={1.5}
+                              >
+                                <Status status={"active"} />
+                                <Typography
+                                  variant="body2"
+                                  align="center"
+                                  color={"text.secondary"}
+                                >
+                                  {format(
+                                    new Date(item.created_date),
+                                    "dd MMM H:I"
+                                  )}
+                                </Typography>
+                                <Stack direction="row" spacing={1}>
+                                  <EditTask
+                                    onEditTask={() =>
+                                      setDetailView({
+                                        item,
+                                        mode: TaskViewMode.UPDATE,
+                                      })
+                                    }
+                                  />
+                                  <RemoveTask
+                                    id={item._id}
+                                    onChangeItem={handleChangeItem}
+                                  />
+                                </Stack>
+                              </Stack>
                             </Stack>
-                          </Stack>
-                        </Stack>
-                        {index < data.length - 1 && <Divider />}
-                      </React.Fragment>
-                    ))}
+                            {index < data!.length - 1 && <Divider />}
+                          </React.Fragment>
+                        ))}
+                      </>
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        color={"text.secondary"}
+                        sx={{ py: 2 }}
+                      >
+                        There are no tasks yet - let's create the first one.
+                      </Typography>
+                    )}
                   </Stack>
                   {!!detailView && (
                     <Box sx={{ flex: 1 }}>

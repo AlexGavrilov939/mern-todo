@@ -31,8 +31,8 @@ type LoginLocationState = {
 
 export const useLogin = (
   refetch: (
-    options?: RefetchOptions | undefined,
-  ) => Promise<QueryObserverResult<User, Error>>,
+    options?: RefetchOptions | undefined
+  ) => Promise<QueryObserverResult<User, Error>>
 ): UseMutationResult<Token, Error | ViolationError, LoginCredentials> => {
   const navigate = useNavigate();
   const location = useLocation();

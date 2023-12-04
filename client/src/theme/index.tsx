@@ -22,7 +22,7 @@ const ThemeProvider = ({
       shadows: shadows.light,
       shape: { borderRadius: 6 },
     }),
-    [],
+    []
   );
 
   const ltrTheme = createTheme(deepmerge({ direction: "ltr" }, themeOptions));
